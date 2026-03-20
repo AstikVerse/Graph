@@ -1,0 +1,24 @@
+class Solution {
+    int MOD = 1e9 + 7;
+    private:
+    int solve(int n,int curr,int st,int x,vector<vector<int>>&dp){
+        if(curr==n){
+            return 1;
+        }
+        long long p = pow(st,x);
+        if(curr+p>n) return 0;
+        if(dp[curr][st]!=-1){
+            return dp[curr][st];
+        }
+        
+        int nottake = solve(n,curr,st+1,x,dp);
+        int  take = solve(n,curr+p,st+1,x,dp); 
+        
+        return dp[curr][st]=(take + nottake)%MOD;
+    }
+public:
+    int numberOfWays(int n, int x) {
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+        return solve(n,0,1,x,dp);
+    }
+};
