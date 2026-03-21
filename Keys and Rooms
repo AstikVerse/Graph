@@ -2,7 +2,7 @@ class Solution {
   
 
 public:
-    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+    bool canVisitAllRooms(vector<vector<int>>& rooms) { 
         int V =rooms.size();
         vector<int>visited(V,0);
         queue<int>q;
