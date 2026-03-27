@@ -1,0 +1,36 @@
+class Solution {
+    private:
+    bool dfs(int node,int curr,vector<vector<int>>&adjlist,vector<int>&color){
+        color[node]=curr;
+        for(auto adjNode: adjlist[node]){
+            if(color[adjNode]==-1){
+                if(!dfs(adjNode,!curr,adjlist,color)){
+                    return false;
+                }
+            }else{
+                if(curr==color[adjNode]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+       vector<int>color(n+1,-1);
+       vector<vector<int>>adjlist(n+1);
+       for(int i=0;i<dislikes.size();i++){
+        int u =dislikes[i][0], v = dislikes[i][1];
+        adjlist[u].push_back(v);
+        adjlist[v].push_back(u);
+       }
+       for(int i =1;i<=n;i++){
+         if(color[i]==-1){
+            if(!dfs(i,0,adjlist,color)){
+                return false;
+            }
+         }
+       }
+       return true;
+    }
+};
