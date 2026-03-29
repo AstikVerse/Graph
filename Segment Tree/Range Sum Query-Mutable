@@ -1,0 +1,59 @@
+class NumArray {
+private:
+    vector<int> seg;
+    int n;
+    void build(vector<int>& nums, vector<int>& seg, int i, int l, int r) {
+        if (l == r) {
+            seg[i] = nums[l];
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(nums, seg, 2 * i + 1, l, mid);
+        build(nums, seg, 2 * i + 2, mid + 1, r);
+        seg[i] = seg[2 * i + 1] + seg[2 * i + 2];
+    }
+    void updatetree(vector<int>&seg,int treeind,int ind, int val,int l,int r){
+        if(l==r){
+            seg[treeind]=val;
+            return ;
+        }
+        int mid=(l+r)/2;
+        if(ind<=mid){
+            updatetree(seg,2*treeind+1,ind,val,l,mid);
+        }else{
+            updatetree(seg,2*treeind+2,ind,val,mid+1,r);
+        }
+        seg[treeind]=seg[2*treeind+1]+seg[2*treeind+2];
+    }
+    int query(vector<int>&seg,int ind,int start,int end,int l,int r){
+        if(end<l||r<start){
+            return 0;
+        }
+         if(start<=l&&r<=end){
+            return seg[ind];
+        }
+        int mid=(l+r)/2;
+        return query(seg,2*ind+1,start,end,l,mid)+query(seg, 2*ind+2,start,end,mid+1,r);
+    }
+public:
+    NumArray(vector<int>& nums) {
+        n = nums.size();
+        seg.resize(4*n);
+        build(nums,seg,0,0,n-1);
+    }
+
+    void update(int index, int val) {
+        updatetree(seg,0,index,val,0,n-1);
+    }
+
+    int sumRange(int left, int right) {
+        return query(seg,0,left,right,0,n-1);
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(index,val);
+ * int param_2 = obj->sumRange(left,right);
+ */
